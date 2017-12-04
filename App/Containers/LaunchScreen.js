@@ -5,6 +5,7 @@ import { Images } from '../Themes'
 // Styles
 import styles from './Styles/LaunchScreenStyles'
 
+
 export default class LaunchScreen extends Component {
   render () {
     return (
