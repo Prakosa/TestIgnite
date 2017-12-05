@@ -29,9 +29,6 @@ export default StyleSheet.create({
         fontWeight:'bold',
         flex:1                //Step 3
     },
-    container:{
-      height: 660
-    },
   content:{
     backgroundColor:'#fff',
     flexDirection: 'column',

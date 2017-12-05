@@ -1,13 +1,10 @@
 import React, { Component } from 'react'
 import { ScrollView, Text, KeyboardAvoidingView, Image, View, TouchableOpacity} from 'react-native'
 import { connect } from 'react-redux'
-import { Images } from '../Themes'
+import { Images, Colors } from '../Themes'
 import NavigationBar from 'navigationbar-react-native';
 import BottomNavigation, { Tab } from 'react-native-material-bottom-navigation'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-
-// Add Actions - replace 'Your' with whatever your reducer is called :)
-// import YourActions from '../Redux/YourRedux'
 
 // Styles
 import styles from './Styles/RestaurantScreenStyle'
@@ -46,7 +43,7 @@ class RestaurantScreen extends Component {
         return(
           <View style={{ flex: 1, }}>
              <Image
-              source={require('../Images/zomato_logo.png')}
+              source={require('../Images/Content/logonavbar.png')}
               style={{resizeMode: 'contain', width: 200, height: 100, alignSelf: 'center' }}
             />
           </View>
@@ -57,13 +54,16 @@ class RestaurantScreen extends Component {
         return(
           <View style={{ flex: 1, alignItems: 'flex-end', }}>
             <TouchableOpacity>
-              <Text style={{ color: 'white', marginRight: 8}}> Dropdown </Text>
+              <Image 
+                source={require('../Images/Content/image.png')}
+                style={{ resizeMode: 'contain', width: 40, height: 40, alignSelf: 'center', marginRight: 8 }}
+              />
             </TouchableOpacity>
           </View>
         );
       };
     return (
-      <View style={styles.container}>
+      <View style={{ flex:1 }}>
         <NavigationBar 
           componentLeft     =     {<ComponentLeft />}
           componentCenter   =     {<ComponentCenter />}
@@ -71,6 +71,8 @@ class RestaurantScreen extends Component {
           navigationBarStyle=     {{ backgroundColor: '#D32F2F' }}
           statusBarStyle    =     {{ barStyle: 'light-content', backgroundColor: '#215e79' }}
         />
+        <View style={{ flex:1 }}>
+        <ScrollView style={{ marginBottom: 64 }}>
         <TouchableOpacity style={styles.content} onPress={()=>this.handleDetailRestaurant(navigate)}>
           <View style={styles.contentRow} >
             <Image source={Images.launch} style={styles.imageTitle}/>
@@ -84,6 +86,7 @@ class RestaurantScreen extends Component {
             <Text style={styles.locationDistance}>Location and Distance</Text>
           </View>
         </TouchableOpacity>
+        </ScrollView>
         <BottomNavigation
               labelColor="white"
               rippleColor="white"
@@ -110,7 +113,8 @@ class RestaurantScreen extends Component {
                 label="Newsstand"
                 icon={<Icon size={24} color="white" name="tv" />}
               />
-            </BottomNavigation>
+          </BottomNavigation>
+          </View>
      </View>
     )
   }

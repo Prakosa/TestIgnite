@@ -8,13 +8,14 @@ import styles from './Styles/NavigationStyles'
 
 // Manifest of possible screens
 const PrimaryNav = StackNavigator({
+  LaunchScreen: { screen: LaunchScreen},
   TestScreen: { screen: TestScreen },
   RestaurantScreen: { screen: RestaurantScreen },
   DetailRestaurantScreen: { screen: DetailRestaurantScreen }
 }, {
   // Default config for all screens
   headerMode: 'none',
-  initialRouteName: 'TestScreen',
+  initialRouteName: 'LaunchScreen',
   navigationOptions: {
     headerStyle: styles.header
   }

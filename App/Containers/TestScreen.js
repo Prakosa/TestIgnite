@@ -41,7 +41,24 @@ export default class TestScreen extends Component {
           name: "Dine-out"
         }
 
-    }
+    },
+    {
+        categories: 
+        {
+          id: "3",
+          name: "Nightlife"
+        }
+
+    },
+    {
+        categories: 
+        {
+          id: "4",
+          name: "Catching-up"
+        }
+
+    },
+
     ];
     var clonedCategory = standardDataSource.cloneWithRows(category);
     const { navigate } = this.props.navigation
@@ -50,7 +67,7 @@ export default class TestScreen extends Component {
         return(
           <View style={{ flex: 1, }}>
              <Image
-              source={require('../Images/zomato_logo.png')}
+              source={require('../Images/Content/logonavbar.png')}
               style={{resizeMode: 'contain', width: 200, height: 100, alignSelf: 'center' }}
             />
           </View>
@@ -61,7 +78,10 @@ export default class TestScreen extends Component {
         return(
           <View style={{ flex: 1, alignItems: 'flex-end', }}>
             <TouchableOpacity>
-              <Text style={{ color: 'white', marginRight: 8}}> DropDown </Text>
+              <Image 
+                source={require('../Images/Content/image.png')}
+                style={{ resizeMode: 'contain', width: 40, height: 40, alignSelf: 'center', marginRight: 8 }}
+              />
             </TouchableOpacity>
           </View>
         );
@@ -69,23 +89,27 @@ export default class TestScreen extends Component {
 
 
     return (
-      <View>
+      <View style={{ flex:1 }}>
       <NavigationBar 
           componentCenter   =     {<ComponentCenter />}
           componentRight    =     {<ComponentRight />}
           navigationBarStyle=     {{ backgroundColor: '#D32F2F' }}
           statusBarStyle    =     {{ barStyle: 'light-content', backgroundColor: '#215e79' }}
         />
-        <View style={styles.container}>
-          <ScrollView>
+        <View style={{ flex:1 }}>
+        <ScrollView style={{ marginBottom: 64 }}>
           <ListView
-
             dataSource={clonedCategory}
             renderRow={
               (rowData) => 
-              <TouchableOpacity style={styles.content} onPress={()=>this.handleRestaurant(navigate)}>
-                <Text style={styles.contentTitle} >{rowData.categories.name}</Text>
-              </TouchableOpacity>
+              <View style={styles.content}>
+                <View style={styles.contentDetail}>
+                  <View style={{ marginLeft: 8, borderColor: '#D32F2F', borderWidth: 1}}/>
+                  <Text style={styles.contentTitle} >{rowData.categories.name}</Text>
+                  <View style={styles.contentBackgroundButton}/>
+                  <TouchableOpacity style={styles.goto} onPress={()=>this.handleRestaurant(navigate)}><Image source={require('../Images/LandingPage/image.png')} style={{width: 70, height: 70}}/></TouchableOpacity>
+                </View>
+              </View>
             }
             />
           </ScrollView>
@@ -119,6 +143,7 @@ export default class TestScreen extends Component {
         </View>
         
       </View>
+
     );
   }
 }

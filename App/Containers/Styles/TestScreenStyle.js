@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import { ApplicationStyles } from '../../Themes/'
+import { Metrics, ApplicationStyles } from '../../Themes/'
 
 export default StyleSheet.create({
   ...ApplicationStyles.screen,
@@ -15,9 +15,6 @@ export default StyleSheet.create({
         textAlign:'center',
         flex: 1
     },
-    container:{
-        height: 608
-    },
     toolbarTitle:{
         width: 30,
         height: 30,
@@ -25,9 +22,18 @@ export default StyleSheet.create({
     },
   content:{
     backgroundColor:'#fff', 
-    width: 412,
+    flex:1,
     height: 150,
-    marginTop:8
+    marginTop:8,
+    marginRight:8,
+    marginLeft:8,
+    borderRadius:10,
+    borderWidth: 1,
+    borderColor: '#fff'
+  },
+  contentDetail: {
+    flexDirection: 'row',
+    flex:1
   },
   contentTitle:{
     color:'#000',
@@ -35,6 +41,22 @@ export default StyleSheet.create({
     fontWeight:'bold',
     marginTop: 60,
     fontSize: 20,
-    flex:1
+    flex:3
+  },
+  contentBackgroundButton: {
+    flex:1,
+    backgroundColor: '#D32F2F',
+    marginRight: 0,
+    borderBottomRightRadius: 10,
+    borderTopRightRadius: 10,
+    borderWidth: 1,
+    borderColor: '#fff'
+  },
+  goto: {
+    position: 'absolute',
+    right: 15,
+    top: 35,
+    width: 70,
+    height: 70
   }
 })

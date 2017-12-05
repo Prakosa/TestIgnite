@@ -34,7 +34,7 @@ class DetailRestaurantScreen extends Component {
         return(
           <View style={{ flex: 1, }}>
              <Image
-              source={require('../Images/zomato_logo.png')}
+              source={require('../Images/Content/logonavbar.png')}
               style={{resizeMode: 'contain', width: 200, height: 100, alignSelf: 'center' }}
             />
           </View>
