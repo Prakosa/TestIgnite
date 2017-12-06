@@ -42,7 +42,7 @@ class DetailRestaurantScreen extends Component {
       };
        
     return (
-      <View>
+      <View style={{ flex:1 }}>
         <NavigationBar 
           componentLeft     =     {<ComponentLeft />}
           componentCenter   =     {<ComponentCenter />}
@@ -50,13 +50,19 @@ class DetailRestaurantScreen extends Component {
           statusBarStyle    =     {{ barStyle: 'light-content', backgroundColor: '#215e79' }}
         />
         <View style={styles.content}>
-          <Text style={styles.restaurantName}>Restaurant Name</Text>
-          <Image source={require('../Images/makanan.jpg')} style={styles.imageContent}/>
-          <Text style={styles.contentTitleTop}>Address and Distance</Text>
-          <Text style={styles.contentTitleTop}>Other Details..</Text>
-          <Text style={styles.contentTitleBottom}>Menu Link</Text>
-          <Text style={styles.contentTitleOther}>Other Links</Text>
-          <Text style={styles.contentTitleOther}>Reviews</Text>
+          <ScrollView style={{ marginBottom: 17, marginTop: 17 }}>
+            <Text style={styles.restaurantName}>Restaurant Name</Text>
+            <Image source={require('../Images/makanan.jpg')} style={styles.imageContent}/>
+            <Text style={styles.contentTitleTop}>Address and Distance</Text>
+            <Text style={styles.contentTitleTop}>Other Details..</Text>
+            <Text style={styles.contentTitleBottom}>Menu Link</Text>
+            <Text style={styles.contentTitleOther}>Other Links</Text>
+            <Text style={styles.contentTitleOther}>Reviews</Text>
+            <View style={{ borderColor: '#D32F2F', borderWidth: 1, marginBottom: 40}}/>
+            <View style={{ borderColor: '#D32F2F', borderWidth: 1, marginBottom: 40}}/>
+            <View style={{ borderColor: '#D32F2F', borderWidth: 1, marginBottom: 40}}/>
+            <View style={{ borderColor: '#D32F2F', borderWidth: 1}}/>
+          </ScrollView>
         </View>        
       </View>
     )

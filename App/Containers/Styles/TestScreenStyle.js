@@ -3,33 +3,16 @@ import { Metrics, ApplicationStyles } from '../../Themes/'
 
 export default StyleSheet.create({
   ...ApplicationStyles.screen,
-  toolbar:{
-        backgroundColor:'#81c04d',
-        paddingTop:10,
-        paddingBottom:10,
-        flexDirection:'row'    //Step 1
-    },
-    toolbarButton:{
-        width: 50,            //Step 2
-        color:'#fff',
-        textAlign:'center',
-        flex: 1
-    },
-    toolbarTitle:{
-        width: 30,
-        height: 30,
-        flex:1                //Step 3
-    },
   content:{
     backgroundColor:'#fff', 
     flex:1,
     height: 150,
-    marginTop:8,
-    marginRight:8,
-    marginLeft:8,
+    marginTop:16,
+    marginRight:16,
+    marginLeft:16,
     borderRadius:10,
     borderWidth: 1,
-    borderColor: '#fff'
+    borderColor: '#D32F2F'
   },
   contentDetail: {
     flexDirection: 'row',
@@ -58,5 +41,28 @@ export default StyleSheet.create({
     top: 35,
     width: 70,
     height: 70
+  },
+  contentModalTop: {
+    marginTop: 100,
+    backgroundColor:'#fff', 
+    flex: 1,
+    flexDirection: 'column',
+    borderRadius:10,
+    borderWidth: 1,
+    borderColor: '#D32F2F'
+  },
+  contentModalBottom: {
+    flex:1.5
+  },
+  txtModal: {
+    color:'#000',
+    textAlign:'center',
+    marginTop: 16,
+    marginBottom: 16,
+    fontWeight:'bold',
+    fontSize: 25
+  },
+  button: {
+    color: "white"
   }
 })

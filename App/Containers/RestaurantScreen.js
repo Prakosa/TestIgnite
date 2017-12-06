@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { ScrollView, Text, KeyboardAvoidingView, Image, View, TouchableOpacity} from 'react-native'
+import { SearchBar, Avatar, ListItem, Card, Button, List} from 'react-native-elements'
 import { connect } from 'react-redux'
 import { Images, Colors } from '../Themes'
 import NavigationBar from 'navigationbar-react-native';
@@ -8,6 +9,30 @@ import Icon from 'react-native-vector-icons/MaterialIcons'
 
 // Styles
 import styles from './Styles/RestaurantScreenStyle'
+
+const restoran = [
+  {
+    name: 'Ramen',
+    costandRating: '20k 5 star',
+    cuisine: 'resto',
+    locationDistance: 'New York, 5km',
+    avatar: 'https://cdn.pixabay.com/photo/2015/04/10/00/41/food-715542_960_720.jpg'
+  },
+  {
+    name: 'Sushi',
+    costandRating: '20k 5 star',
+    cuisine: 'resto',
+    locationDistance: 'New York, 5km',
+    avatar: 'https://cdn.pixabay.com/photo/2017/10/15/11/41/sushi-2853382_960_720.jpg'
+  },
+  {
+    name: 'Sashimi',
+    costandRating: '20k 5 star',
+    cuisine: 'resto',
+    locationDistance: 'New York, 5km',
+    avatar: 'https://cdn.pixabay.com/photo/2017/06/05/18/54/sushi-2374910_960_720.jpg'
+  }
+]
 
 class RestaurantScreen extends Component {
 
@@ -55,7 +80,7 @@ class RestaurantScreen extends Component {
           <View style={{ flex: 1, alignItems: 'flex-end', }}>
             <TouchableOpacity>
               <Image 
-                source={require('../Images/Content/image.png')}
+                source={require('../Images/Content/cityselectornew.png')}
                 style={{ resizeMode: 'contain', width: 40, height: 40, alignSelf: 'center', marginRight: 8 }}
               />
             </TouchableOpacity>
@@ -71,21 +96,42 @@ class RestaurantScreen extends Component {
           navigationBarStyle=     {{ backgroundColor: '#D32F2F' }}
           statusBarStyle    =     {{ barStyle: 'light-content', backgroundColor: '#215e79' }}
         />
+        <SearchBar
+          round
+          lightTheme
+          // onChangeText={someMethod}
+          // onClearText={someMethod}
+          inputStyle={{backgroundColor: '#fff'}}
+          containerStyle={{backgroundColor: '#D32F2F'}}
+          placeholder='Type Here...' />
         <View style={{ flex:1 }}>
         <ScrollView style={{ marginBottom: 64 }}>
-        <TouchableOpacity style={styles.content} onPress={()=>this.handleDetailRestaurant(navigate)}>
-          <View style={styles.contentRow} >
-            <Image source={Images.launch} style={styles.imageTitle}/>
-            <View style={styles.contentRowColumn} >
-              <Text style={styles.restaurantName}>Restaurant Name</Text>
-              <Text style={styles.costRating}>Cost and Rating</Text>
-              <Text style={styles.cuisine}>Cuisine</Text>
+        <View style={styles.content}>
+          <View>
+            {
+              restoran.map((restoran, i) => {
+              return (
+              <Card key={i} containerStyle={styles.roundedContent}>
+                <View style={styles.contentRow} >
+                  <Image source={{ uri: restoran.avatar }} style={styles.imageTitle}/>
+                  <View style={styles.contentRowColumn} >
+                    <Text style={styles.restaurantName}>{restoran.name}</Text>
+                    <Text style={styles.costRating}>{restoran.costandRating}</Text>
+                    <Text style={styles.cuisine}>{restoran.cuisine}</Text>
+                  </View>
+                </View>
+                <View style={styles.contentColumn}>
+                  <Text style={styles.locationDistance}>{restoran.locationDistance}</Text>
+                  <TouchableOpacity onPress={()=>this.handleDetailRestaurant(navigate)}>
+                    <Text style={styles.txtDetailResto}>See Detail Menu</Text>
+                  </TouchableOpacity>
+                </View>
+              </Card>
+              );
+              })
+            }
             </View>
-          </View>
-          <View style={styles.contentColumn}>
-            <Text style={styles.locationDistance}>Location and Distance</Text>
-          </View>
-        </TouchableOpacity>
+        </View>
         </ScrollView>
         <BottomNavigation
               labelColor="white"

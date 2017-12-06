@@ -3,53 +3,43 @@ import { ApplicationStyles } from '../../Themes/'
 
 export default StyleSheet.create({
   ...ApplicationStyles.screen,
-  logo: {
-    height: 50,
-    width: 50,
-    resizeMode: 'contain',
-    flex:1  
-  },
   centered: {
     alignItems: 'center'
   },
-  toolbar:{
-        backgroundColor:'#81c04d',
-        paddingTop:10,
-        paddingBottom:10,
-        flexDirection:'row'    //Step 1
-    },
-    toolbarButton:{
-        width: 50,            //Step 2
-        color:'#fff',
-        textAlign:'center'
-    },
-    toolbarTitle:{
-        color:'#fff',
-        textAlign:'center',
-        fontWeight:'bold',
-        flex:1                //Step 3
-    },
   container: {
       flexDirection: 'column',
       flex: 1
     },
     content:{
-    backgroundColor:'#fff',
-    flexDirection: 'column',
-    marginTop: 8
+    backgroundColor:'#fff', 
+    flex:1,
+    height: 220,
+    marginTop:16,
+    marginRight:16,
+    marginLeft:16,
+    marginBottom:16,
+    borderRadius:20,
+    borderWidth: 1,
+    margin: 0,
+    borderColor: '#D32F2F',
+    flexDirection: 'column'
   },
-    imageContent: {      
-      marginLeft: 56,
-      width: 300,
+    imageContent: { 
+      marginTop: 16,
+      marginLeft: 1,
+      marginRight: 1,
+      flex: 1,
       height: 300
     },
     restaurantName: {
       fontSize: 30,
+      flex:1,
       textAlign: 'center',
       color: 'black'
     },
     contentTitleTop: {
       fontSize: 20,
+      flex:1,
       marginLeft: 16,
       color: 'black'
     },
@@ -57,12 +47,15 @@ export default StyleSheet.create({
       fontSize: 20,
       paddingTop: 16,
       marginLeft: 16,
-      color: 'black'
+      color: 'black',
+      flex:1
     },
     contentTitleOther:{
       fontSize:20,
       marginLeft: 16,
-      color: 'black'
+      marginBottom: 16,
+      color: 'black',
+      flex:1
     }
 
 })

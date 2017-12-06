@@ -5,6 +5,7 @@ import { Images } from '../Themes'
 import NavigationBar from 'navigationbar-react-native';
 import BottomNavigation, { Tab } from 'react-native-material-bottom-navigation'
 import Icon from 'react-native-vector-icons/MaterialIcons'
+import Modal from 'react-native-modal'
 // Add Actions - replace 'Your' with whatever your reducer is called :)
 // import YourActions from '../Redux/YourRedux'
 
@@ -17,7 +18,14 @@ export default class TestScreen extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      isModalVisible: false
+    }
   }
+
+  _showModal = () => this.setState({isModalVisible: true})
+
+  _hideModal = () => this.setState({isModalVisible: false})
 
   handleRestaurant (navigate) {
     navigate('RestaurantScreen')
@@ -77,9 +85,9 @@ export default class TestScreen extends Component {
       const ComponentRight = () => {
         return(
           <View style={{ flex: 1, alignItems: 'flex-end', }}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={this._showModal}>
               <Image 
-                source={require('../Images/Content/image.png')}
+                source={require('../Images/Content/cityselectornew.png')}
                 style={{ resizeMode: 'contain', width: 40, height: 40, alignSelf: 'center', marginRight: 8 }}
               />
             </TouchableOpacity>
@@ -90,6 +98,15 @@ export default class TestScreen extends Component {
 
     return (
       <View style={{ flex:1 }}>
+        <Modal isVisible={this.state.isModalVisible}>
+          <View style={styles.contentModalTop}>
+            <Text style={styles.txtModal}>City</Text>
+            <RoundedButton style={styles.button} text={"New York"} onPress={this._hideModal} />
+            <RoundedButton style={styles.button} text={"New Jersey"} onPress={this._hideModal} />
+          </View>
+          <View style={styles.contentModalBottom}>
+          </View>
+        </Modal>
       <NavigationBar 
           componentCenter   =     {<ComponentCenter />}
           componentRight    =     {<ComponentRight />}
