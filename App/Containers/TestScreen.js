@@ -6,6 +6,7 @@ import NavigationBar from 'navigationbar-react-native';
 import BottomNavigation, { Tab } from 'react-native-material-bottom-navigation'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import Modal from 'react-native-modal'
+import API from '../Services/Api'
 // Add Actions - replace 'Your' with whatever your reducer is called :)
 // import YourActions from '../Redux/YourRedux'
 
