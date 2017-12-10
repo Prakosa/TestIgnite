@@ -6,7 +6,7 @@ import NavigationBar from 'navigationbar-react-native';
 import BottomNavigation, { Tab } from 'react-native-material-bottom-navigation'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import Modal from 'react-native-modal'
-import API from '../Services/Api'
+import CategoriesActions from '../Redux/CategoriesRedux'
 // Add Actions - replace 'Your' with whatever your reducer is called :)
 // import YourActions from '../Redux/YourRedux'
 
@@ -15,12 +15,20 @@ import styles from './Styles/TestScreenStyle'
 import RoundedButton from '../Components/RoundedButton'
 import I18n from 'react-native-i18n'
 
-export default class TestScreen extends Component {
+class TestScreen extends Component {
 
   constructor(props) {
     super(props);
+
+    const dataObjects = [
+      { id: '1', name: 'lala' }
+    ];
+    const rowHasChanged = (r1, r2) => r1 !== r2
+    const ds = new ListView.DataSource({rowHasChanged})
+
     this.state = {
-      isModalVisible: false
+      isModalVisible: false,
+      dataSource: ds.cloneWithRows(dataObjects)
     }
   }
 
@@ -28,48 +36,111 @@ export default class TestScreen extends Component {
 
   _hideModal = () => this.setState({isModalVisible: false})
 
-  handleRestaurant (navigate) {
-    navigate('RestaurantScreen')
+  //HANDLE NAVIGATE TO A DETAIL WITHOUT ROW DATA
+  // handleRestaurant (navigate) {
+  //   navigate('RestaurantScreen')
+  // }
+
+   handleRestaurant (navigate, catID) {
+    navigate('RestaurantScreen', { ID: catID })
+  }
+
+  renderRow (rowData) {
+    if(rowData.categories){
+      return (
+        <View style={styles.content}>
+          <View style={styles.contentDetail}>
+            <View style={{ marginLeft: 8, borderColor: '#D32F2F', borderWidth: 1}}/>
+            <Text style={styles.contentTitle} >{rowData.categories.name}</Text>
+            <View style={styles.contentBackgroundButton}/>
+            <TouchableOpacity style={styles.goto} onPress={()=>this.handleRestaurant(navigate, rowData.categories.id)}><Image source={require('../Images/LandingPage/image.png')} style={{width: 70, height: 70}}/></TouchableOpacity>
+          </View>
+        </View>
+      )
+    }
+    return (
+        <View>
+          <Text>Loading...</Text>
+        </View>
+      )
+  }
+
+  setupCategories () {
+    if (!this.props.categoriesPayload) {
+      this.props.categoriesRequest()
+    } else {
+      this.setState({
+          dataSource: this.props.categoriesPayload.categories
+          // dataSource: this.props.categoriesPayload.categories
+        // id: this.props.categoriesPayload.id,
+        // name: this.props.categoriesPayload.name
+      }) 
+    }
+  }
+
+  checkCategories (newProps) {
+    this.forceUpdate();
+    if (newProps.categoriesPayload) {
+      this.setState({
+        // categories: newProps.categoriesPayload.categories
+        dataSource: this.state.dataSource.cloneWithRows(newProps.categoriesPayload.categories)
+        
+        // id: this.props.categoriesPayload.id,
+        // name: this.props.categoriesPayload.name
+        
+      })
+    }
+  }
+
+   componentWillMount () {
+    // setup initial Chapter if Redux exist
+    this.setupCategories()
+  }
+
+  componentWillReceiveProps (newProps) {
+    // check new Chapter after request the chapter
+    this.checkCategories(newProps)
   }
 
   render () {
-    var standardDataSource = new ListView.DataSource({rowHasChanged: (r1,r2)=> r1 !== r2});
-    var category = [
-    {
-        categories: 
-        {
-          id: "1",
-          name: "Delivery"
-        }
+    // var standardDataSource = new ListView.DataSource({rowHasChanged: (r1,r2)=> r1 !== r2});
+    // FOR DATA DUMMY
+    // var category = [
+    // {
+    //     categories: 
+    //     {
+    //       id: "1",
+    //       name: "Delivery"
+    //     }
 
-    },
-    {
-        categories: 
-        {
-          id: "2",
-          name: "Dine-out"
-        }
+    // },
+    // {
+    //     categories: 
+    //     {
+    //       id: "2",
+    //       name: "Dine-out"
+    //     }
 
-    },
-    {
-        categories: 
-        {
-          id: "3",
-          name: "Nightlife"
-        }
+    // },
+    // {
+    //     categories: 
+    //     {
+    //       id: "3",
+    //       name: "Nightlife"
+    //     }
 
-    },
-    {
-        categories: 
-        {
-          id: "4",
-          name: "Catching-up"
-        }
+    // },
+    // {
+    //     categories: 
+    //     {
+    //       id: "4",
+    //       name: "Catching-up"
+    //     }
 
-    },
+    // },
 
-    ];
-    var clonedCategory = standardDataSource.cloneWithRows(category);
+    // ];
+    // var clonedCategory = standardDataSource.cloneWithRows(category);
     const { navigate } = this.props.navigation
        
       const ComponentCenter = () => {
@@ -117,18 +188,8 @@ export default class TestScreen extends Component {
         <View style={{ flex:1 }}>
         <ScrollView style={{ marginBottom: 64 }}>
           <ListView
-            dataSource={clonedCategory}
-            renderRow={
-              (rowData) => 
-              <View style={styles.content}>
-                <View style={styles.contentDetail}>
-                  <View style={{ marginLeft: 8, borderColor: '#D32F2F', borderWidth: 1}}/>
-                  <Text style={styles.contentTitle} >{rowData.categories.name}</Text>
-                  <View style={styles.contentBackgroundButton}/>
-                  <TouchableOpacity style={styles.goto} onPress={()=>this.handleRestaurant(navigate)}><Image source={require('../Images/LandingPage/image.png')} style={{width: 70, height: 70}}/></TouchableOpacity>
-                </View>
-              </View>
-            }
+            dataSource={this.state.dataSource}
+            renderRow={this.renderRow}
             />
           </ScrollView>
             <BottomNavigation
@@ -165,5 +226,21 @@ export default class TestScreen extends Component {
     );
   }
 }
+TestScreen.propTypes = {}
 
-AppRegistry.registerComponent('Example List View', () => TestScreen)
+const mapStateToProps = (state) => {
+  return {
+    categoriesPayload: state.categories.categoriesPayload,
+    categoriesError: state.categories.categoriesError,
+    categoriesFetching: state.categories.categoriesFetching
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    categoriesRequest: () => dispatch(CategoriesActions.categoriesRequest())
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TestScreen)
+// AppRegistry.registerComponent('Example List View', () => TestScreen)

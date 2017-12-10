@@ -5,6 +5,7 @@ import Immutable from 'seamless-immutable'
 
 const { Types, Creators } = createActions({
   categoriesRequest: null,
+  // categoriesSuccess: ['data'],
   categoriesSuccess: ['categoriesPayload'],
   categoriesFailure: ['categoriesError']
 })
@@ -15,6 +16,7 @@ export default Creators
 /* ------------- Initial State ------------- */
 
 export const INITIAL_STATE = Immutable({
+  // data: null,
   categoriesFetching: null,
   categoriesPayload: null,
   categoriesError: null
@@ -24,12 +26,20 @@ export const INITIAL_STATE = Immutable({
 
 // request the data from an api
 export const categoriesRequest = (state) =>
-  state.merge({ categoriesFetching: true })
+  // state.merge({ categoriesFetching: true })
+  state.merge({categoriesFetching: true, categoriesPayload: null})
 
 // successful api lookup
-export const categoriesSuccess = (state, action) => {
-  const { chapterPayload } = action
+export const categoriesSuccess = (state, { categoriesPayload }) => {
+  // console.log('vvvvvvvvvv');
+  // console.log(state);
+  // console.log(action);
+  // console.log('CATEGORIES_SUCCESS');
+  // const { categoriesPayload } = state
+  console.log(categoriesPayload);
+  console.log('^^^^^^^^^^^^^^^ categoriesPayload');
   return state.merge({ categoriesFetching: false, categoriesError: null, categoriesPayload })
+  // return state.merge({ categoriesFetching: false, categoriesError: null, data })
 }
 
 // Something went wrong somewhere.

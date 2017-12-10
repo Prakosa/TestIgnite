@@ -6,38 +6,46 @@ import { Images, Colors } from '../Themes'
 import NavigationBar from 'navigationbar-react-native';
 import BottomNavigation, { Tab } from 'react-native-material-bottom-navigation'
 import Icon from 'react-native-vector-icons/MaterialIcons'
+import API from '../Services/Api'
+import RestaurantByCategoriesActions from '../Redux/RestaurantByCategoriesRedux'
 
 // Styles
 import styles from './Styles/RestaurantScreenStyle'
 
-const restoran = [
-  {
-    name: 'Ramen',
-    costandRating: '20k 5 star',
-    cuisine: 'resto',
-    locationDistance: 'New York, 5km',
-    avatar: 'https://cdn.pixabay.com/photo/2015/04/10/00/41/food-715542_960_720.jpg'
-  },
-  {
-    name: 'Sushi',
-    costandRating: '20k 5 star',
-    cuisine: 'resto',
-    locationDistance: 'New York, 5km',
-    avatar: 'https://cdn.pixabay.com/photo/2017/10/15/11/41/sushi-2853382_960_720.jpg'
-  },
-  {
-    name: 'Sashimi',
-    costandRating: '20k 5 star',
-    cuisine: 'resto',
-    locationDistance: 'New York, 5km',
-    avatar: 'https://cdn.pixabay.com/photo/2017/06/05/18/54/sushi-2374910_960_720.jpg'
-  }
-]
+// const restoran = [
+//   {
+//     name: 'Ramen',
+//     costandRating: '20k 5 star',
+//     cuisine: 'resto',
+//     locationDistance: 'New York, 5km',
+//     avatar: 'https://cdn.pixabay.com/photo/2015/04/10/00/41/food-715542_960_720.jpg'
+//   },
+//   {
+//     name: 'Sushi',
+//     costandRating: '20k 5 star',
+//     cuisine: 'resto',
+//     locationDistance: 'New York, 5km',
+//     avatar: 'https://cdn.pixabay.com/photo/2017/10/15/11/41/sushi-2853382_960_720.jpg'
+//   },
+//   {
+//     name: 'Sashimi',
+//     costandRating: '20k 5 star',
+//     cuisine: 'resto',
+//     locationDistance: 'New York, 5km',
+//     avatar: 'https://cdn.pixabay.com/photo/2017/06/05/18/54/sushi-2374910_960_720.jpg'
+//   }
+// ]
 
 class RestaurantScreen extends Component {
 
   constructor(props) {
     super(props);
+    const dataObjects = [];
+    const rowHasChanged = (r1, r2) => r1 !== r2
+    const ds = new ListView.DataSource({rowHasChanged})
+    this.state ={
+        dataSource: ds.cloneWithRows(dataObjects)
+    }
   }
 
   handleDetailRestaurant (navigate) {
@@ -46,6 +54,73 @@ class RestaurantScreen extends Component {
 
   backTestScreen (navigate) {
     navigate('TestScreen')
+  }
+
+  renderRow (rowData) {
+    if(rowData.restaurant){
+      return (
+        <View>
+              <Card containerStyle={styles.roundedContent}>
+                <View style={styles.contentRow} >
+                  <Image source={{ uri: restaurant.photo_url }} style={styles.imageTitle}/>
+                  <View style={styles.contentRowColumn} >
+                    <Text style={styles.restaurantName}>{restaurant.name}</Text>
+                    <Text style={styles.costRating}>{restaurant.average_cost_for_two}</Text>
+                    <Text style={styles.cuisine}>{restaurant.cuisine}</Text>
+                  </View>
+                </View>
+                <View style={styles.contentColumn}>
+                  <Text style={styles.locationDistance}>{restaurant.address}</Text>
+                  <TouchableOpacity onPress={()=>this.handleDetailRestaurant(navigate)}>
+                    <Text style={styles.txtDetailResto}>See Detail Menu</Text>
+                  </TouchableOpacity>
+                </View>
+              </Card>
+            </View>
+      )
+    }
+    return (
+        <View>
+          <Text>Loading...</Text>
+        </View>
+      )
+  }
+
+  setupRestaurantByCategories () {
+    if (!this.props.payload) {
+      this.props.restaurantByCategoriesSuccess()
+    } else {
+      this.setState({
+          dataSource: this.props.payload.restaurant
+          // dataSource: this.props.categoriesPayload.categories
+        // id: this.props.categoriesPayload.id,
+        // name: this.props.categoriesPayload.name
+      }) 
+    }
+  }
+
+  checkRestaurantByCategories (newProps) {
+    this.forceUpdate();
+    if (newProps.payload) {
+      this.setState({
+        // categories: newProps.categoriesPayload.categories
+        dataSource: this.state.dataSource.cloneWithRows(newProps.payload.restaurant)
+        
+        // id: this.props.categoriesPayload.id,
+        // name: this.props.categoriesPayload.name
+        
+      })
+    }
+  }
+
+   componentWillMount () {
+    // setup initial Chapter if Redux exist
+    this.setupRestaurantByCategories()
+  }
+
+  componentWillReceiveProps (newProps) {
+    // check new Chapter after request the chapter
+    this.checkRestaurantByCategories(newProps)
   }
 
   render () {
@@ -107,30 +182,10 @@ class RestaurantScreen extends Component {
         <View style={{ flex:1 }}>
         <ScrollView style={{ marginBottom: 64 }}>
         <View style={styles.content}>
-          <View>
-            {
-              restoran.map((restoran, i) => {
-              return (
-              <Card key={i} containerStyle={styles.roundedContent}>
-                <View style={styles.contentRow} >
-                  <Image source={{ uri: restoran.avatar }} style={styles.imageTitle}/>
-                  <View style={styles.contentRowColumn} >
-                    <Text style={styles.restaurantName}>{restoran.name}</Text>
-                    <Text style={styles.costRating}>{restoran.costandRating}</Text>
-                    <Text style={styles.cuisine}>{restoran.cuisine}</Text>
-                  </View>
-                </View>
-                <View style={styles.contentColumn}>
-                  <Text style={styles.locationDistance}>{restoran.locationDistance}</Text>
-                  <TouchableOpacity onPress={()=>this.handleDetailRestaurant(navigate)}>
-                    <Text style={styles.txtDetailResto}>See Detail Menu</Text>
-                  </TouchableOpacity>
-                </View>
-              </Card>
-              );
-              })
-            }
-            </View>
+          <ListView
+            dataSource={this.state.dataSource}
+            renderRow={this.renderRow}
+          />
         </View>
         </ScrollView>
         <BottomNavigation
@@ -168,11 +223,15 @@ class RestaurantScreen extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    payload: state.restaurantByCategories.payload,
+    error: state.restaurantByCategories.error,
+    fetching: state.restaurantByCategories.fetching
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    restaurantByCategoriesRequest: () => dispatch(RestaurantByCategoriesActions.restaurantByCategoriesRequest())
   }
 }
 

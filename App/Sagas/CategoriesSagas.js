@@ -13,13 +13,19 @@
 import { call, put } from 'redux-saga/effects'
 import CategoriesActions from '../Redux/CategoriesRedux'
 
-export function * getCategories (api) {
-
-  const response = yield call(api.getCategories)
-  if (response.status === 200) {
-    yield put (CategoriesActions.categoriesSucces(response.data.response))
+export function * categoriesRequest (api) {
+  // const { data } = action
+  const response = yield call(api.getCategories);
+  // const response = yield call(api.getRestaurantByCategories(catID));
+  console.log(api);
+  console.log('^^^^^^^^^^^ categoriesRequest')
+  if (response.status == 200) {
+  	console.log(response.data);
+  	console.log('200');
+    yield put (CategoriesActions.categoriesSuccess(response.data))
   }else {
-
+  	console.log('else');
+  	console.log(response);
     yield put(CategoriesActions.categoriesFailure('Error'))
   }
   

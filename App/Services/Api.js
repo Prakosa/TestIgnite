@@ -2,7 +2,7 @@
 import apisauce from 'apisauce'
 
 // our "constructor"
-const create = (baseURL = 'https://developers.zomato.com/api/') => {
+const create = (baseURL = 'https://developers.zomato.com/api/v2.1/') => {
   // ------
   // STEP 1
   // ------
@@ -14,7 +14,8 @@ const create = (baseURL = 'https://developers.zomato.com/api/') => {
     baseURL,
     // here are some default headers
     headers: {
-      'Cache-Control': 'no-cache'
+      'Cache-Control': 'no-cache',
+      'user_key': 'c5506a5909f2e0f4338be6121c996d42'
     },
     // 10 second timeout...
     timeout: 10000
@@ -35,7 +36,9 @@ const create = (baseURL = 'https://developers.zomato.com/api/') => {
   // way at this level.
   //
   const getRoot = () => api.get('')
-  const getCategories = () => api.get('v2.1/categories', {user_key: 'c5506a5909f2e0f4338be6121c996d42'}) 
+  const getCategories = () => api.get('categories')
+  const getRestaurantByCategories = (catID) => api.get('search?category=' + catID) 
+  // const getPopular = () => api.get('movie/popular', { api_key: 'cf73a59652c9a9806c06af8a6295e3a3' });
 
   // ------
   // STEP 3

@@ -8,7 +8,8 @@ export default () => {
     nav: require('./NavigationRedux').reducer,
     github: require('./GithubRedux').reducer,
     search: require('./SearchRedux').reducer,
-    categories: require('./CategoriesRedux').reducer
+    categories: require('./CategoriesRedux').reducer,
+    restaurantByCategories: require('./RestaurantByCategoriesRedux').reducer
   })
 
   const rootReducer = (state, action) => {
