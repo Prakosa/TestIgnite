@@ -6,6 +6,7 @@ import DebugConfig from '../Config/DebugConfig'
 /* ------------- Types ------------- */
 import { CategoriesTypes } from '../Redux/CategoriesRedux'
 import { RestaurantByCategoriesTypes } from '../Redux/RestaurantByCategoriesRedux'
+import { DetailRestaurantTypes } from '../Redux/DetailRestaurantRedux'
 import { StartupTypes } from '../Redux/StartupRedux'
 import { GithubTypes } from '../Redux/GithubRedux'
 
@@ -14,7 +15,8 @@ import { GithubTypes } from '../Redux/GithubRedux'
 import { startup } from './StartupSagas'
 import { getUserAvatar } from './GithubSagas'
 import { categoriesRequest} from './CategoriesSagas'
-import { restaurantByCategoriesSuccess} from './RestaurantByCategoriesSagas'
+import { restaurantByCategoriesRequest} from './RestaurantByCategoriesSagas'
+import { detailRestaurantRequest} from './DetailRestaurantSagas'
 
 /* ------------- API ------------- */
 
@@ -31,6 +33,7 @@ export default function * root () {
 
     // some sagas receive extra parameters in addition to an action
     takeLatest(CategoriesTypes.CATEGORIES_REQUEST, categoriesRequest, api),
-    takeLatest(RestaurantByCategoriesTypes.RESTAURANT_BY_CATEGORIES_SUCCESS, restaurantByCategoriesSuccess, api)
+    takeLatest(RestaurantByCategoriesTypes.RESTAURANT_BY_CATEGORIES_REQUEST, restaurantByCategoriesRequest, api),
+    takeLatest(DetailRestaurantTypes.DETAIL_RESTAURANT_REQUEST, detailRestaurantRequest, api),
   ])
 }

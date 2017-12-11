@@ -11,22 +11,24 @@
 *************************************************************/
 
 import { call, put } from 'redux-saga/effects'
-import RestaurantByCategoriesActions from '../Redux/RestaurantByCategoriesRedux'
+import DetailRestaurantActions from '../Redux/DetailRestaurantRedux'
 
-export function * restaurantByCategoriesRequest (api) {
+export function * detailRestaurantRequest (api) {
   // const { data } = action
   // make the call to the api
-  const response = yield call(api.getRestaurantByCategories);
+  const response = yield call(api.getDetailRestaurant);
 
   // success?
   if (response.status == 200) {
-    console.log('200');
-    console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^restoran');
+    console.log('200')
+    console.log(response.data)
+    console.log('^^^^^^^^^^^^^^^^^^^^^^DINA')
     // You might need to change the response here - do this with a 'transform',
     // located in ../Transforms/. Otherwise, just pass the data back from the api.
-    yield put(RestaurantByCategoriesActions.restaurantByCategoriesSuccess(response.data))
+    yield put(DetailRestaurantActions.detailRestaurantSuccess(response.data))
   } else {
     console.log('else');
-    yield put(RestaurantByCategoriesActions.restaurantByCategoriesFailure('Error'))
+    console.log(response.status);
+    yield put(DetailRestaurantActions.detailRestaurantFailure('Error'))
   }
 }

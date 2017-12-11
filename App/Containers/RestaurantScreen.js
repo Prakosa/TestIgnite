@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ScrollView, Text, KeyboardAvoidingView, Image, View, TouchableOpacity} from 'react-native'
+import { ScrollView, Text, KeyboardAvoidingView, Image, View, TouchableOpacity, ListView} from 'react-native'
 import { SearchBar, Avatar, ListItem, Card, Button, List} from 'react-native-elements'
 import { connect } from 'react-redux'
 import { Images, Colors } from '../Themes'
@@ -62,16 +62,16 @@ class RestaurantScreen extends Component {
         <View>
               <Card containerStyle={styles.roundedContent}>
                 <View style={styles.contentRow} >
-                  <Image source={{ uri: restaurant.photo_url }} style={styles.imageTitle}/>
+                  <Image source={{ uri: rowData.restaurant.featured_image }} style={styles.imageTitle}/>
                   <View style={styles.contentRowColumn} >
-                    <Text style={styles.restaurantName}>{restaurant.name}</Text>
-                    <Text style={styles.costRating}>{restaurant.average_cost_for_two}</Text>
-                    <Text style={styles.cuisine}>{restaurant.cuisine}</Text>
+                    <Text style={styles.restaurantName}>{rowData.restaurant.name}</Text>
+                    <Text style={styles.costRating}>{rowData.restaurant.average_cost_for_two}</Text>
+                    <Text style={styles.cuisine}>{rowData.restaurant.cuisines}</Text>
                   </View>
                 </View>
                 <View style={styles.contentColumn}>
-                  <Text style={styles.locationDistance}>{restaurant.address}</Text>
-                  <TouchableOpacity onPress={()=>this.handleDetailRestaurant(navigate)}>
+                  <Text style={styles.locationDistance}>{rowData.restaurant.location.city}</Text>
+                  <TouchableOpacity onPress={()=>{this.props.navigation.navigate('DetailRestaurantScreen')}}>
                     <Text style={styles.txtDetailResto}>See Detail Menu</Text>
                   </TouchableOpacity>
                 </View>
@@ -88,13 +88,10 @@ class RestaurantScreen extends Component {
 
   setupRestaurantByCategories () {
     if (!this.props.payload) {
-      this.props.restaurantByCategoriesSuccess()
+      this.props.restaurantByCategoriesRequest()
     } else {
       this.setState({
-          dataSource: this.props.payload.restaurant
-          // dataSource: this.props.categoriesPayload.categories
-        // id: this.props.categoriesPayload.id,
-        // name: this.props.categoriesPayload.name
+          dataSource: this.props.payload.restaurants
       }) 
     }
   }
@@ -103,12 +100,7 @@ class RestaurantScreen extends Component {
     this.forceUpdate();
     if (newProps.payload) {
       this.setState({
-        // categories: newProps.categoriesPayload.categories
-        dataSource: this.state.dataSource.cloneWithRows(newProps.payload.restaurant)
-        
-        // id: this.props.categoriesPayload.id,
-        // name: this.props.categoriesPayload.name
-        
+        dataSource: this.state.dataSource.cloneWithRows(newProps.payload.restaurants)
       })
     }
   }
@@ -121,15 +113,17 @@ class RestaurantScreen extends Component {
   componentWillReceiveProps (newProps) {
     // check new Chapter after request the chapter
     this.checkRestaurantByCategories(newProps)
+    console.log('propsdatang');
+    console.log(newProps);
   }
 
   render () {
 
-    const { navigate } = this.props.navigation
+    const { goBack } = this.props.navigation
     const ComponentLeft = () => {
         return(
           <View style={{ flex: 1, alignItems: 'flex-start'}} >
-             <TouchableOpacity style={ {justifyContent:'center', flexDirection: 'row'}} onPress={()=>this.backTestScreen(navigate)} >
+             <TouchableOpacity style={ {justifyContent:'center', flexDirection: 'row'}} onPress={() => goBack('RestaurantScreen')} >
               <Image 
                 source={require('../Images/button-back.png')}
                 style={{ resizeMode: 'contain', width: 40, height: 40, alignSelf: 'center' }}
@@ -183,8 +177,9 @@ class RestaurantScreen extends Component {
         <ScrollView style={{ marginBottom: 64 }}>
         <View style={styles.content}>
           <ListView
+            enableEmptySections={true}
             dataSource={this.state.dataSource}
-            renderRow={this.renderRow}
+            renderRow={this.renderRow.bind(this)}
           />
         </View>
         </ScrollView>

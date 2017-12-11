@@ -21,7 +21,7 @@ class TestScreen extends Component {
     super(props);
 
     const dataObjects = [
-      { id: '1', name: 'lala' }
+      { id: '1', tetek: 'lala' }
     ];
     const rowHasChanged = (r1, r2) => r1 !== r2
     const ds = new ListView.DataSource({rowHasChanged})
@@ -41,10 +41,6 @@ class TestScreen extends Component {
   //   navigate('RestaurantScreen')
   // }
 
-   handleRestaurant (navigate, catID) {
-    navigate('RestaurantScreen', { ID: catID })
-  }
-
   renderRow (rowData) {
     if(rowData.categories){
       return (
@@ -53,7 +49,7 @@ class TestScreen extends Component {
             <View style={{ marginLeft: 8, borderColor: '#D32F2F', borderWidth: 1}}/>
             <Text style={styles.contentTitle} >{rowData.categories.name}</Text>
             <View style={styles.contentBackgroundButton}/>
-            <TouchableOpacity style={styles.goto} onPress={()=>this.handleRestaurant(navigate, rowData.categories.id)}><Image source={require('../Images/LandingPage/image.png')} style={{width: 70, height: 70}}/></TouchableOpacity>
+            <TouchableOpacity style={styles.goto} onPress={()=>{this.props.navigation.navigate('RestaurantScreen')}}><Image source={require('../Images/LandingPage/image.png')} style={{width: 70, height: 70}}/></TouchableOpacity>
           </View>
         </View>
       )
@@ -189,7 +185,7 @@ class TestScreen extends Component {
         <ScrollView style={{ marginBottom: 64 }}>
           <ListView
             dataSource={this.state.dataSource}
-            renderRow={this.renderRow}
+            renderRow={this.renderRow.bind(this)}
             />
           </ScrollView>
             <BottomNavigation

@@ -9,7 +9,8 @@ export default () => {
     github: require('./GithubRedux').reducer,
     search: require('./SearchRedux').reducer,
     categories: require('./CategoriesRedux').reducer,
-    restaurantByCategories: require('./RestaurantByCategoriesRedux').reducer
+    restaurantByCategories: require('./RestaurantByCategoriesRedux').reducer,
+    detailRestaurant: require('./DetailRestaurantRedux').reducer
   })
 
   const rootReducer = (state, action) => {

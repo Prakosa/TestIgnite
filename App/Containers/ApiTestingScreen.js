@@ -36,29 +36,12 @@ class ApiTestingScreen extends React.Component {
     }
   }
 
-  handleRestaurant (navigate, catID) {
-    navigate('RestaurantScreen', { ID: catID })
+  // handleRestaurant (navigate, catID) {
+  //   navigate('RestaurantScreen', { ID: catID })
+  // }
+  handleRestaurant (navigate) {
+    navigate('RestaurantScreen')
   }
-
-  renderRow (rowData) {
-    if(rowData.categories){
-      return (
-        <View>
-          <Text>{rowData.categories.id}</Text>
-          <Text>{rowData.categories.name}</Text>
-          <TouchableOpacity style={styles.goto} onPress={()=> {
-            this.handleRestaurant(navigate, rowData.categories.id);
-          }}><Image source={require('../Images/LandingPage/image.png')} style={{width: 70, height: 70}}/></TouchableOpacity>
-        </View>
-      )
-    }
-    return (
-        <View>
-          <Text>Loading...</Text>
-        </View>
-      )
-  }
-
   // getData = async () => {
   //   const api = API.create()
   //   const category = await api.getCategories()
@@ -107,20 +90,39 @@ class ApiTestingScreen extends React.Component {
   // returns true if the dataSource is empty
   render () {
     const { navigate } = this.props.navigation
-    console.log(navigate);
     return (
       <ScrollView bounces={false}>
       <View>
         <ListView
           dataSource={this.state.dataSource}
-          renderRow={this.renderRow}
-        />
-      </View>
+          renderRow={this.renderRow.bind(this)}
+          />
         <Text> blablabla</Text>
+      </View>
       </ScrollView>
 
     )
   }
+
+ renderRow(rowData) {
+    if(rowData.categories){
+      return (
+        <View>
+          <Text>{rowData.categories.id}</Text>
+          <Text>{rowData.categories.name}</Text>
+          <TouchableOpacity style={styles.goto} onPress={()=>{this.props.navigation.navigate('RestaurantScreen', {catID: rowData.categories.id})}}>
+          <Image source={require('../Images/LandingPage/image.png')} style={{width: 70, height: 70}}/>
+          </TouchableOpacity>
+        </View>
+      )
+    }
+    return (
+        <View>
+          <Text>Loading...</Text>
+        </View>
+      )
+  }
+
 }
 ApiTestingScreen.propTypes = {}
 

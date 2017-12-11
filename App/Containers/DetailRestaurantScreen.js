@@ -1,8 +1,12 @@
 import React, { Component } from 'react'
-import { ScrollView, Text, KeyboardAvoidingView, Image, View, TouchableOpacity } from 'react-native'
+import { ScrollView, Text, KeyboardAvoidingView, Image, View, TouchableOpacity, ListView} from 'react-native'
 import { connect } from 'react-redux'
 import { Images } from '../Themes'
 import NavigationBar from 'navigationbar-react-native';
+
+import Icon from 'react-native-vector-icons/MaterialIcons'
+import API from '../Services/Api'
+import DetailRestaurantActions from '../Redux/DetailRestaurantRedux'
 // Add Actions - replace 'Your' with whatever your reducer is called :)
 // import YourActions from '../Redux/YourRedux'
 
@@ -10,17 +14,74 @@ import NavigationBar from 'navigationbar-react-native';
 import styles from './Styles/DetailRestaurantScreenStyle'
 
 class DetailRestaurantScreen extends Component {
+  constructor (props) {
+    super(props)
+
+    this.state = {
+      restaurantName: '',
+      restaurantImage: '',
+      restaurantAddress: '',
+      restaurantCuisines: '',
+      restaurantMenuLink: '',
+      restaurantOtherLink: '',
+      restaurantReviews: ''
+    }
+  }
+
+  setupDetail () {
+    if (!this.props.payload) {
+      this.props.detailRestaurantRequest()
+    } else {
+      this.setState({
+        restaurantName: this.props.payload.name,
+        restaurantImage: this.props.payload.featured_image,
+        restaurantAddress: this.props.payload.location.city,
+        restaurantCuisines: this.props.payload.cuisines,
+        restaurantMenuLink: this.props.payload.menu_url,
+        restaurantOtherLink: this.props.payload.deeplink,
+        restaurantReviews: this.props.payload.user_rating.rating_text
+      })
+    }
+  }
+
+  checkDetail (newProps) {
+    if (newProps.payload) {
+      console.log(newProps.payload.name);
+      console.log('***********************************************');
+      this.setState({
+        restaurantName: newProps.payload.name,
+        restaurantImage: newProps.payload.featured_image,
+        restaurantAddress: newProps.payload.location.city,
+        restaurantCuisines: newProps.payload.cuisines,
+        restaurantMenuLink: newProps.payload.menu_url,
+        restaurantOtherLink: newProps.payload.deeplink,
+        restaurantReviews: newProps.payload.user_rating.rating_text
+      })
+    }
+  }
+
+  componentWillMount () {
+    // setup initial Chapter if Redux exist
+    this.setupDetail()
+  }
+
+  componentWillReceiveProps (newProps) {
+    // check new Chapter after request the chapter
+    console.log(newProps.name);
+     console.log('SETUPDETAIL^^^^^^^^^^^^^^^^^^^^')
+    this.checkDetail(newProps)
+  }
 
   handleRestaurant (navigate) {
     navigate('RestaurantScreen')
   }
 
   render () {
-    const { navigate } = this.props.navigation
+    const { goBack } = this.props.navigation
     const ComponentLeft = () => {
         return(
           <View style={{ flex: 1, alignItems: 'flex-start'}} >
-             <TouchableOpacity style={ {justifyContent:'center', flexDirection: 'row'}} onPress={()=>this.handleRestaurant(navigate)}>
+             <TouchableOpacity style={ {justifyContent:'center', flexDirection: 'row'}} onPress={() => goBack(null)}>
               <Image 
                 source={require('../Images/button-back.png')}
                 style={{ resizeMode: 'contain', width: 40, height: 40, alignSelf: 'center' }}
@@ -51,13 +112,13 @@ class DetailRestaurantScreen extends Component {
         />
         <View style={styles.content}>
           <ScrollView style={{ marginBottom: 17, marginTop: 17 }}>
-            <Text style={styles.restaurantName}>Restaurant Name</Text>
-            <Image source={require('../Images/makanan.jpg')} style={styles.imageContent}/>
-            <Text style={styles.contentTitleTop}>Address and Distance</Text>
-            <Text style={styles.contentTitleTop}>Other Details..</Text>
-            <Text style={styles.contentTitleBottom}>Menu Link</Text>
-            <Text style={styles.contentTitleOther}>Other Links</Text>
-            <Text style={styles.contentTitleOther}>Reviews</Text>
+            <Text style={styles.restaurantName}>{this.state.restaurantName}</Text>
+            <Image source={{uri: this.state.restaurantImage}} style={styles.imageContent}/>
+            <Text style={styles.contentTitleTop}>{this.state.restaurantAddress}</Text>
+            <Text style={styles.contentTitleTop}>{this.state.restaurantCuisines}</Text>
+            <Text style={styles.contentTitleBottom}>{this.state.restaurantMenuLink}</Text>
+            <Text style={styles.contentTitleOther}>{this.state.restaurantOtherLink}</Text>
+            <Text style={styles.contentTitleOther}>{this.state.restaurantReviews}</Text>
             <View style={{ borderColor: '#D32F2F', borderWidth: 1, marginBottom: 40}}/>
             <View style={{ borderColor: '#D32F2F', borderWidth: 1, marginBottom: 40}}/>
             <View style={{ borderColor: '#D32F2F', borderWidth: 1, marginBottom: 40}}/>
@@ -71,11 +132,15 @@ class DetailRestaurantScreen extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    payload: state.detailRestaurant.payload,
+    error: state.detailRestaurant.error,
+    fetching: state.detailRestaurant.fetching
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    detailRestaurantRequest: () => dispatch(DetailRestaurantActions.detailRestaurantRequest())
   }
 }
 
