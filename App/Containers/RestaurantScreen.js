@@ -123,7 +123,7 @@ class RestaurantScreen extends Component {
     const ComponentLeft = () => {
         return(
           <View style={{ flex: 1, alignItems: 'flex-start'}} >
-             <TouchableOpacity style={ {justifyContent:'center', flexDirection: 'row'}} onPress={() => goBack('RestaurantScreen')} >
+             <TouchableOpacity style={ {justifyContent:'center', flexDirection: 'row'}} onPress={() => goBack(null)} >
               <Image 
                 source={require('../Images/button-back.png')}
                 style={{ resizeMode: 'contain', width: 40, height: 40, alignSelf: 'center' }}
