@@ -70,5 +70,25 @@ export default StyleSheet.create({
     paddingBottom: 16,
     textDecorationLine: 'underline',
     color: 'red'
+  },
+  contentModalTop: {
+    marginTop: 100,
+    backgroundColor:'#fff', 
+    flex: 1,
+    flexDirection: 'column',
+    borderRadius:10,
+    borderWidth: 1,
+    borderColor: '#D32F2F'
+  },
+  contentModalBottom: {
+    flex:1.5
+  },
+  txtModal: {
+    color:'#000',
+    textAlign:'center',
+    marginTop: 16,
+    marginBottom: 16,
+    fontWeight:'bold',
+    fontSize: 25
   }
 })

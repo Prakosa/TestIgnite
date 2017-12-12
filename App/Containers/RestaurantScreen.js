@@ -9,8 +9,10 @@ import Icon from 'react-native-vector-icons/MaterialIcons'
 import API from '../Services/Api'
 import RestaurantByCategoriesActions from '../Redux/RestaurantByCategoriesRedux'
 
+import Modal from 'react-native-modal'
 // Styles
 import styles from './Styles/RestaurantScreenStyle'
+import RoundedButton from '../Components/RoundedButton'
 
 // const restoran = [
 //   {
@@ -44,9 +46,14 @@ class RestaurantScreen extends Component {
     const rowHasChanged = (r1, r2) => r1 !== r2
     const ds = new ListView.DataSource({rowHasChanged})
     this.state ={
+        isModalVisible: false,
         dataSource: ds.cloneWithRows(dataObjects)
     }
   }
+
+  _showModal = () => this.setState({isModalVisible: true})
+
+  _hideModal = () => this.setState({isModalVisible: false})
 
   handleDetailRestaurant (navigate) {
     navigate('DetailRestaurantScreen')
@@ -55,6 +62,10 @@ class RestaurantScreen extends Component {
   backTestScreen (navigate) {
     navigate('TestScreen')
   }
+
+  // {renderIf( rowData.restaurant.featured_image== null)(
+  //                 <Image source={{ uri: 'http://vignette3.wikia.nocookie.net/simpsons/images/6/60/No_Image_Available.png' }} style={styles.imageTitle}/>
+  //               )}
 
   renderRow (rowData) {
     if(rowData.restaurant){
@@ -147,7 +158,7 @@ class RestaurantScreen extends Component {
       const ComponentRight = () => {
         return(
           <View style={{ flex: 1, alignItems: 'flex-end', }}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={this._showModal}>
               <Image 
                 source={require('../Images/Content/cityselectornew.png')}
                 style={{ resizeMode: 'contain', width: 40, height: 40, alignSelf: 'center', marginRight: 8 }}
@@ -158,6 +169,15 @@ class RestaurantScreen extends Component {
       };
     return (
       <View style={{ flex:1 }}>
+        <Modal isVisible={this.state.isModalVisible}>
+          <View style={styles.contentModalTop}>
+            <Text style={styles.txtModal}>City</Text>
+            <RoundedButton style={styles.button} text={"New York"} onPress={this._hideModal} />
+            <RoundedButton style={styles.button} text={"New Jersey"} onPress={this._hideModal} />
+          </View>
+          <View style={styles.contentModalBottom}>
+          </View>
+        </Modal>
         <NavigationBar 
           componentLeft     =     {<ComponentLeft />}
           componentCenter   =     {<ComponentCenter />}
