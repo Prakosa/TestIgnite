@@ -23,6 +23,7 @@ export function * categoriesRequest (api) {
     yield put (CategoriesActions.categoriesSuccess(response.data))
   }else {
   	console.log('else');
+    console.log(response.status);
     yield put(CategoriesActions.categoriesFailure('Error'))
   }
   

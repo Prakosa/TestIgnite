@@ -30,8 +30,9 @@ export const categoriesRequest = (state) =>
   state.merge({categoriesFetching: true, categoriesPayload: null})
 
 // successful api lookup
-export const categoriesSuccess = (state, { categoriesPayload }) => {
+export const categoriesSuccess = (state, action) => {
   // console.log('vvvvvvvvvv');
+  const { categoriesPayload } = action
   return state.merge({ categoriesFetching: false, categoriesError: null, categoriesPayload })
   // return state.merge({ categoriesFetching: false, categoriesError: null, data })
 }

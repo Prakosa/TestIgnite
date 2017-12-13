@@ -12,15 +12,21 @@
 
 import { call, put } from 'redux-saga/effects'
 import RestaurantByCategoriesActions from '../Redux/RestaurantByCategoriesRedux'
+import AppConfig from '../Config/AppConfig'
+import FindEat from '../Services/FindEat'
 
-export function * restaurantByCategoriesRequest (api) {
+const ApiForSaga = FindEat.create()
+
+export function * restaurantByCategoriesRequest (api,action) {
   // const { data } = action
   // make the call to the api
-  const response = yield call(api.getRestaurantByCategories);
+  console.log('Action restaurantByCategoriesRequest: '+ action);
+  const response = yield call(ApiForSaga.apiForSaga, AppConfig.baseURL+"search?category="+action.catId, "GET", "");
 
   // success?
   if (response.status == 200) {
     console.log('200');
+    console.log('ACTION DATA : ' + action.catId);
     console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^restoran');
     // You might need to change the response here - do this with a 'transform',
     // located in ../Transforms/. Otherwise, just pass the data back from the api.

@@ -25,6 +25,7 @@ export default StyleSheet.create({
     flexDirection: 'row'
   },
   contentRowColumn: {
+    flex:1,
     flexDirection: 'column'
   },
   imageTitle: {
@@ -33,6 +34,15 @@ export default StyleSheet.create({
     borderRadius:20,
     marginTop: 8,
     marginLeft:8
+  },
+  noImageTitle: {
+    width: 150,
+    height: 150,
+    borderColor: '#D32F2F',
+    borderRadius:20,
+    marginTop: 8,
+    marginLeft:8,
+    textAlign: 'center'
   },
   contentColumn: {
     flexDirection:'row'
@@ -48,7 +58,7 @@ export default StyleSheet.create({
   restaurantName: {
     marginTop: 0,
     marginLeft: 16,
-    fontSize: 30,
+    fontSize: 25,
     color: 'black'
   },
   costRating: {
@@ -59,7 +69,7 @@ export default StyleSheet.create({
   },
   cuisine: {
     marginLeft: 16,
-    fontSize: 20,
+    fontSize: 18,
     marginTop: 8,
     color: 'black'
   },

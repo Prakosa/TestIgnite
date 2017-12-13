@@ -24,24 +24,30 @@ class DetailRestaurantScreen extends Component {
       restaurantCuisines: '',
       restaurantMenuLink: '',
       restaurantOtherLink: '',
-      restaurantReviews: ''
+      restaurantReviews: '',
+      restaurantPhotoUrl: '',
+      res_id: null
     }
   }
 
   setupDetail () {
-    if (!this.props.payload) {
-      this.props.detailRestaurantRequest()
-    } else {
-      this.setState({
-        restaurantName: this.props.payload.name,
-        restaurantImage: this.props.payload.featured_image,
-        restaurantAddress: this.props.payload.location.city,
-        restaurantCuisines: this.props.payload.cuisines,
-        restaurantMenuLink: this.props.payload.menu_url,
-        restaurantOtherLink: this.props.payload.deeplink,
-        restaurantReviews: this.props.payload.user_rating.rating_text
-      })
-    }
+    const {state} = this.props.navigation;
+    this.state.res_id=state.params.res_id
+    console.log(this.props.navigation.state.params.res_id);
+    this.props.detailRestaurantRequest(state.params.res_id)
+    // if (!this.props.payload) {
+    //   this.props.detailRestaurantRequest()
+    // } else {
+    //   this.setState({
+    //     restaurantName: this.props.payload.name,
+    //     restaurantImage: this.props.payload.featured_image,
+    //     restaurantAddress: this.props.payload.location.city,
+    //     restaurantCuisines: this.props.payload.cuisines,
+    //     restaurantMenuLink: this.props.payload.menu_url,
+    //     restaurantOtherLink: this.props.payload.deeplink,
+    //     restaurantReviews: this.props.payload.user_rating.rating_text
+    //   })
+    // }
   }
 
   checkDetail (newProps) {
@@ -55,7 +61,8 @@ class DetailRestaurantScreen extends Component {
         restaurantCuisines: newProps.payload.cuisines,
         restaurantMenuLink: newProps.payload.menu_url,
         restaurantOtherLink: newProps.payload.deeplink,
-        restaurantReviews: newProps.payload.user_rating.rating_text
+        restaurantReviews: newProps.payload.user_rating.rating_text,
+        restaurantPhotoUrl: newProps.payload.photo_url
       })
     }
   }
@@ -113,16 +120,14 @@ class DetailRestaurantScreen extends Component {
         <View style={styles.content}>
           <ScrollView style={{ marginBottom: 17, marginTop: 17 }}>
             <Text style={styles.restaurantName}>{this.state.restaurantName}</Text>
-            <Image source={{uri: this.state.restaurantImage}} style={styles.imageContent}/>
+            {this.state.restaurantImage ?
+              <Image source={{uri: this.state.restaurantImage}} style={styles.imageContent}/>
+              : <Image source={{ uri: 'http://vignette3.wikia.nocookie.net/simpsons/images/6/60/No_Image_Available.png' }} style={styles.imageContent} onPress={() => Linking.openURL(this.state.restaurantPhotoUrl)}/> }
             <Text style={styles.contentTitleTop}>{this.state.restaurantAddress}</Text>
             <Text style={styles.contentTitleTop}>{this.state.restaurantCuisines}</Text>
             <Text style={styles.contentTitleBottom}>{this.state.restaurantMenuLink}</Text>
             <Text style={styles.contentTitleOther}>{this.state.restaurantOtherLink}</Text>
             <Text style={styles.contentTitleOther}>{this.state.restaurantReviews}</Text>
-            <View style={{ borderColor: '#D32F2F', borderWidth: 1, marginBottom: 40}}/>
-            <View style={{ borderColor: '#D32F2F', borderWidth: 1, marginBottom: 40}}/>
-            <View style={{ borderColor: '#D32F2F', borderWidth: 1, marginBottom: 40}}/>
-            <View style={{ borderColor: '#D32F2F', borderWidth: 1}}/>
           </ScrollView>
         </View>        
       </View>
@@ -140,7 +145,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    detailRestaurantRequest: () => dispatch(DetailRestaurantActions.detailRestaurantRequest())
+    detailRestaurantRequest: (res_id) => dispatch(DetailRestaurantActions.detailRestaurantRequest(res_id))
   }
 }
 

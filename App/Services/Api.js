@@ -1,8 +1,9 @@
 // a library to wrap and simplify api calls
 import apisauce from 'apisauce'
+import AppConfig from '../Config/AppConfig'
 
 // our "constructor"
-const create = (baseURL = 'https://developers.zomato.com/api/v2.1/') => {
+const create = (baseURL = AppConfig.baseURL) => {
   // ------
   // STEP 1
   // ------
@@ -15,7 +16,7 @@ const create = (baseURL = 'https://developers.zomato.com/api/v2.1/') => {
     // here are some default headers
     headers: {
       'Cache-Control': 'no-cache',
-      'user_key': 'b09bb871409546aa1fa78977bf628138'
+      'user_key': AppConfig.userKey
     },
     // 10 second timeout...
     timeout: 10000
@@ -37,8 +38,9 @@ const create = (baseURL = 'https://developers.zomato.com/api/v2.1/') => {
   //
   const getRoot = () => api.get('')
   const getCategories = () => api.get('categories')
-  // const getRestaurantByCategories = (catID) => api.get('search?category=' + catID) 
-  const getRestaurantByCategories = () => api.get('search?category=5') 
+  // const getRestaurantByCategories = (catId) => api.get('search?category=' + catId) 
+  // const getRestaurantByCategories = () => api.get('search?category=') 
+  const getRestaurantByCategories = () => api.get('') 
   const getDetailRestaurant = () => api.get('restaurant?res_id=16774318')
   // const getDetailRestaurant = (resID) => api.get('restaurant?res_id=' + resID)
   // const getPopular = () => api.get('movie/popular', { api_key: 'cf73a59652c9a9806c06af8a6295e3a3' });

@@ -30,18 +30,27 @@ class TestScreen extends Component {
       isModalVisible: false,
       dataSource: ds.cloneWithRows(dataObjects)
     }
+    // this.onPress = this.onPress.bind(this);
   }
+
+  // onPress(txt) {
+  //   console.log(txt);
+  //   global.catId = txt;
+  //   console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
+  //   console.log(catId);
+  // }
 
   _showModal = () => this.setState({isModalVisible: true})
 
   _hideModal = () => this.setState({isModalVisible: false})
 
   //HANDLE NAVIGATE TO A DETAIL WITHOUT ROW DATA
-  // handleRestaurant (navigate) {
-  //   navigate('RestaurantScreen')
-  // }
+  handleRestaurant (navigate, catId) {
+    navigate('RestaurantScreen', {catId:catId})
+  }
 
   renderRow (rowData) {
+    const { navigate } = this.props.navigation
     if(rowData.categories){
       return (
         <View style={styles.content}>
@@ -49,7 +58,7 @@ class TestScreen extends Component {
             <View style={{ marginLeft: 8, borderColor: '#D32F2F', borderWidth: 1}}/>
             <Text style={styles.contentTitle} >{rowData.categories.name}</Text>
             <View style={styles.contentBackgroundButton}/>
-            <TouchableOpacity style={styles.goto} onPress={()=>{this.props.navigation.navigate('RestaurantScreen')}}><Image source={require('../Images/LandingPage/image.png')} style={{width: 70, height: 70}}/></TouchableOpacity>
+            <TouchableOpacity style={styles.goto} onPress={()=> this.handleRestaurant(navigate, rowData.categories.id)}><Image source={require('../Images/LandingPage/image.png')} style={{width: 70, height: 70}}/></TouchableOpacity>
           </View>
         </View>
       )

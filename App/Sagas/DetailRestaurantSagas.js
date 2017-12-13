@@ -12,11 +12,15 @@
 
 import { call, put } from 'redux-saga/effects'
 import DetailRestaurantActions from '../Redux/DetailRestaurantRedux'
+import AppConfig from '../Config/AppConfig'
+import FindEat from '../Services/FindEat'
 
-export function * detailRestaurantRequest (api) {
+const ApiForSaga = FindEat.create()
+
+export function * detailRestaurantRequest (api, action) {
   // const { data } = action
   // make the call to the api
-  const response = yield call(api.getDetailRestaurant);
+  const response = yield call(ApiForSaga.apiForSaga, AppConfig.baseURL+"restaurant?res_id="+action.res_id, "GET", "");
 
   // success?
   if (response.status == 200) {

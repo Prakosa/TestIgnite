@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { ScrollView, Text, KeyboardAvoidingView, Image, View, TouchableOpacity, ListView} from 'react-native'
 import { SearchBar, Avatar, ListItem, Card, Button, List} from 'react-native-elements'
 import { connect } from 'react-redux'
@@ -13,7 +14,7 @@ import Modal from 'react-native-modal'
 // Styles
 import styles from './Styles/RestaurantScreenStyle'
 import RoundedButton from '../Components/RoundedButton'
-
+import Config from '../Config/AppConfig'
 // const restoran = [
 //   {
 //     name: 'Ramen',
@@ -47,7 +48,9 @@ class RestaurantScreen extends Component {
     const ds = new ListView.DataSource({rowHasChanged})
     this.state ={
         isModalVisible: false,
-        dataSource: ds.cloneWithRows(dataObjects)
+        dataSource: ds.cloneWithRows(dataObjects),
+        catId:null,
+        restaurant: []
     }
   }
 
@@ -55,25 +58,20 @@ class RestaurantScreen extends Component {
 
   _hideModal = () => this.setState({isModalVisible: false})
 
-  handleDetailRestaurant (navigate) {
-    navigate('DetailRestaurantScreen')
+  handleDetailRestaurant (navigate, res_id) {
+    navigate('DetailRestaurantScreen', {res_id:res_id})
   }
-
-  backTestScreen (navigate) {
-    navigate('TestScreen')
-  }
-
-  // {renderIf( rowData.restaurant.featured_image== null)(
-  //                 <Image source={{ uri: 'http://vignette3.wikia.nocookie.net/simpsons/images/6/60/No_Image_Available.png' }} style={styles.imageTitle}/>
-  //               )}
 
   renderRow (rowData) {
+    const { navigate } = this.props.navigation
     if(rowData.restaurant){
       return (
         <View>
               <Card containerStyle={styles.roundedContent}>
                 <View style={styles.contentRow} >
+                {rowData.restaurant.featured_image ?
                   <Image source={{ uri: rowData.restaurant.featured_image }} style={styles.imageTitle}/>
+                  : <Image source={{ uri: 'http://vignette3.wikia.nocookie.net/simpsons/images/6/60/No_Image_Available.png' }} style={styles.imageTitle}/> }
                   <View style={styles.contentRowColumn} >
                     <Text style={styles.restaurantName}>{rowData.restaurant.name}</Text>
                     <Text style={styles.costRating}>{rowData.restaurant.average_cost_for_two}</Text>
@@ -82,7 +80,7 @@ class RestaurantScreen extends Component {
                 </View>
                 <View style={styles.contentColumn}>
                   <Text style={styles.locationDistance}>{rowData.restaurant.location.city}</Text>
-                  <TouchableOpacity onPress={()=>{this.props.navigation.navigate('DetailRestaurantScreen')}}>
+                  <TouchableOpacity onPress={()=>{this.handleDetailRestaurant(navigate, rowData.restaurant.R.res_id)}}>
                     <Text style={styles.txtDetailResto}>See Detail Menu</Text>
                   </TouchableOpacity>
                 </View>
@@ -98,16 +96,24 @@ class RestaurantScreen extends Component {
   }
 
   setupRestaurantByCategories () {
-    if (!this.props.payload) {
-      this.props.restaurantByCategoriesRequest()
-    } else {
-      this.setState({
-          dataSource: this.props.payload.restaurants
-      }) 
-    }
+      const {state} = this.props.navigation;
+      this.state.catId=state.params.catId
+      console.log(this.props.navigation.state.params.catId);
+      this.props.restaurantByCategoriesRequest(state.params.catId)
+    // if (!this.props.payload) {
+    //   this.props.restaurantByCategoriesRequest()
+    // } else {
+    //   this.setState({
+    //       dataSource: this.props.payload.restaurants
+    //   }) 
+    // }
   }
 
   checkRestaurantByCategories (newProps) {
+    // this.setState({
+    //       restaurant: newProps.payload.restaurants,
+    //       dataSource: this.state.dataSource.cloneWithRows(newProps.payload.restaurants)
+    //   })
     this.forceUpdate();
     if (newProps.payload) {
       this.setState({
@@ -124,8 +130,6 @@ class RestaurantScreen extends Component {
   componentWillReceiveProps (newProps) {
     // check new Chapter after request the chapter
     this.checkRestaurantByCategories(newProps)
-    console.log('propsdatang');
-    console.log(newProps);
   }
 
   render () {
@@ -235,18 +239,19 @@ class RestaurantScreen extends Component {
     )
   }
 }
+RestaurantScreen.propTypes = {}
 
 const mapStateToProps = (state) => {
   return {
     payload: state.restaurantByCategories.payload,
     error: state.restaurantByCategories.error,
-    fetching: state.restaurantByCategories.fetching
+    fetching: state.restaurantByCategories.fetching,
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    restaurantByCategoriesRequest: () => dispatch(RestaurantByCategoriesActions.restaurantByCategoriesRequest())
+    restaurantByCategoriesRequest: (catId) => dispatch(RestaurantByCategoriesActions.restaurantByCategoriesRequest(catId))
   }
 }
 
