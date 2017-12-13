@@ -17,24 +17,7 @@ const api = apisauce.create({
 
 const apiForSaga=(path, type, body)=>{
       var bodyJson={}
-      if(type !=='GET'){
-          bodyJson = JSON.parse(body)
-      }
-      if(type ==='POST'){
-          return api.post(path, bodyJson)
-      } else if(type==='PUT'){
-          return api.put(path, bodyJson)
-      } else if(type==='DELETE'){
-          return api.delete(path, bodyJson)
-      } else {
-          api.setHeaders({
-            'user_key': AppConfig.userKey
-          })
-          if(path.includes('nearest_properties')){
-              api.timeout=60000
-          }else{
-              api.timeout=30000
-          } 
+      if(type =='GET'){
           return api.get(path)
       }
   }

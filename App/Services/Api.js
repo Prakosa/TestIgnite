@@ -39,9 +39,9 @@ const create = (baseURL = AppConfig.baseURL) => {
   const getRoot = () => api.get('')
   const getCategories = () => api.get('categories')
   // const getRestaurantByCategories = (catId) => api.get('search?category=' + catId) 
-  // const getRestaurantByCategories = () => api.get('search?category=') 
-  const getRestaurantByCategories = () => api.get('') 
-  const getDetailRestaurant = () => api.get('restaurant?res_id=16774318')
+  const getRestaurantByCategories = () => api.get('search?category=') 
+  // const getRestaurantByCategories = () => api.get('') 
+  const getDetailRestaurant = () => api.get('restaurant?res_id=')
   // const getDetailRestaurant = (resID) => api.get('restaurant?res_id=' + resID)
   // const getPopular = () => api.get('movie/popular', { api_key: 'cf73a59652c9a9806c06af8a6295e3a3' });
 
