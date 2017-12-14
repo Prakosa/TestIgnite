@@ -206,18 +206,18 @@ class RestaurantScreen extends Component {
         );
       };
        
-      const ComponentRight = () => {
-        return(
-          <View style={{ flex: 1, alignItems: 'flex-end', }}>
-            <TouchableOpacity onPress={this._showModal}>
-              <Image 
-                source={require('../Images/Content/cityselectornew.png')}
-                style={{ resizeMode: 'contain', width: 40, height: 40, alignSelf: 'center', marginRight: 8 }}
-              />
-            </TouchableOpacity>
-          </View>
-        );
-      };
+      // const ComponentRight = () => {
+      //   return(
+      //     <View style={{ flex: 1, alignItems: 'flex-end', }}>
+      //       <TouchableOpacity onPress={this._showModal}>
+      //         <Image 
+      //           source={require('../Images/Content/cityselectornew.png')}
+      //           style={{ resizeMode: 'contain', width: 40, height: 40, alignSelf: 'center', marginRight: 8 }}
+      //         />
+      //       </TouchableOpacity>
+      //     </View>
+      //   );
+      // };
     return (
       <View style={{ flex:1 }} >
         <Modal isVisible={this.state.isModalVisible}>
@@ -232,7 +232,7 @@ class RestaurantScreen extends Component {
         <NavigationBar 
           componentLeft     =     {<ComponentLeft />}
           componentCenter   =     {<ComponentCenter />}
-          componentRight    =     {<ComponentRight />}
+          // componentRight    =     {<ComponentRight />}
           navigationBarStyle=     {{ backgroundColor: '#D32F2F' }}
           statusBarStyle    =     {{ barStyle: 'light-content', backgroundColor: '#215e79' }}
         />
