@@ -50,13 +50,35 @@ class RestaurantScreen extends Component {
         isModalVisible: false,
         dataSource: ds.cloneWithRows(dataObjects),
         catId:null,
+        change_id: null,
+        entity_id: null,
         restaurant: []
     }
+    this.arrayholder = [] ;
   }
 
   _showModal = () => this.setState({isModalVisible: true})
 
   _hideModal = () => this.setState({isModalVisible: false})
+
+  newYork = () => {
+    this.setState({
+      change_id: this.state.change_id+280,
+      isModalVisible: false
+    })
+  }
+  // newYork (navigate, change_id){
+  //   navigate('RestaurantScreen', {change_id:change_id}),
+  //   this.setState({
+  //     isModalVisible: false
+  //   })
+  // }
+  newJersey = () => {
+    this.setState({
+      change_id: this.state.change_id+8884,
+      isModalVisible: false
+    })
+  }
 
   handleDetailRestaurant (navigate, res_id) {
     navigate('DetailRestaurantScreen', {res_id:res_id})
@@ -97,9 +119,18 @@ class RestaurantScreen extends Component {
 
   setupRestaurantByCategories () {
       const {state} = this.props.navigation;
-      this.state.catId=state.params.catId
+      console.log('INI CHANGE ID :' +this.state.change_id);
       console.log(this.props.navigation.state.params.catId);
-      this.props.restaurantByCategoriesRequest(state.params.catId)
+      console.log(this.props.navigation.state.params.entity_id);
+      this.state.catId=state.params.catId
+      this.state.entity_id=state.params.entity_id
+      // if (this.state.change_id==null) {
+      this.props.restaurantByCategoriesRequest(state.params.entity_id, state.params.catId)
+    // } else if (this.state.change_id == 280) {
+    //   this.props.restaurantByCategoriesRequest(change_id, state.params.catId)
+    // }else{
+    //   this.props.restaurantByCategoriesRequest(change_id, state.params.catId)
+    // }
     // if (!this.props.payload) {
     //   this.props.restaurantByCategoriesRequest()
     // } else {
@@ -117,8 +148,11 @@ class RestaurantScreen extends Component {
     this.forceUpdate();
     if (newProps.payload) {
       this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(newProps.payload.restaurants)
-      })
+        restaurant: newProps.payload.restaurants,
+        dataSource: this.state.dataSource.cloneWithRows(newProps.payload.restaurants),
+      }, function(){
+        this.arrayholder=newProps.payload.restaurants;
+      });
     }
   }
 
@@ -131,6 +165,19 @@ class RestaurantScreen extends Component {
     // check new Chapter after request the chapter
     this.checkRestaurantByCategories(newProps)
   }
+
+  SearchFilterFunction(text){
+       
+       const newData = this.arrayholder.filter(function(item){
+           const itemData = item.restaurant.name.toUpperCase()
+           const textData = text.toUpperCase()
+           return itemData.indexOf(textData) > -1
+       })
+       this.setState({
+           dataSource: this.state.dataSource.cloneWithRows(newData),
+           text: text
+       })
+   }
 
   render () {
 
@@ -172,12 +219,12 @@ class RestaurantScreen extends Component {
         );
       };
     return (
-      <View style={{ flex:1 }}>
+      <View style={{ flex:1 }} >
         <Modal isVisible={this.state.isModalVisible}>
           <View style={styles.contentModalTop}>
             <Text style={styles.txtModal}>City</Text>
-            <RoundedButton style={styles.button} text={"New York"} onPress={this._hideModal} />
-            <RoundedButton style={styles.button} text={"New Jersey"} onPress={this._hideModal} />
+            <RoundedButton style={styles.button} text={"New York"} onPress={this.newYork} />
+            <RoundedButton style={styles.button} text={"New Jersey"} onPress={this.newJersey} />
           </View>
           <View style={styles.contentModalBottom}>
           </View>
@@ -192,11 +239,10 @@ class RestaurantScreen extends Component {
         <SearchBar
           round
           lightTheme
-          // onChangeText={someMethod}
-          // onClearText={someMethod}
+          onChangeText={(text) => this.SearchFilterFunction(text)}
           inputStyle={{backgroundColor: '#fff'}}
           containerStyle={{backgroundColor: '#D32F2F'}}
-          placeholder='Type Here...' />
+          placeholder='Restaurant name here...' />
         <View style={{ flex:1 }}>
         <ScrollView style={{ marginBottom: 64 }}>
         <View style={styles.content}>
@@ -251,7 +297,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    restaurantByCategoriesRequest: (catId) => dispatch(RestaurantByCategoriesActions.restaurantByCategoriesRequest(catId))
+    restaurantByCategoriesRequest: (entity_id, catId) => dispatch(RestaurantByCategoriesActions.restaurantByCategoriesRequest(entity_id, catId))
   }
 }
 

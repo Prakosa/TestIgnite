@@ -28,7 +28,8 @@ class TestScreen extends Component {
 
     this.state = {
       isModalVisible: false,
-      dataSource: ds.cloneWithRows(dataObjects)
+      dataSource: ds.cloneWithRows(dataObjects),
+      entity_id: null
     }
     // this.onPress = this.onPress.bind(this);
   }
@@ -42,11 +43,25 @@ class TestScreen extends Component {
 
   _showModal = () => this.setState({isModalVisible: true})
 
-  _hideModal = () => this.setState({isModalVisible: false})
+  // _hideModal = () => this.setState({isModalVisible: false})
+
+  newYork = () => {
+    this.setState({
+      entity_id: 280,
+      isModalVisible: false
+    })
+  }
+
+  newJersey = () => {
+    this.setState({
+      entity_id: 8884,
+      isModalVisible: false
+    })
+  }
 
   //HANDLE NAVIGATE TO A DETAIL WITHOUT ROW DATA
-  handleRestaurant (navigate, catId) {
-    navigate('RestaurantScreen', {catId:catId})
+  handleRestaurant (navigate, catId, entity_id) {
+    navigate('RestaurantScreen', {catId:catId, entity_id:entity_id})
   }
 
   renderRow (rowData) {
@@ -58,7 +73,7 @@ class TestScreen extends Component {
             <View style={{ marginLeft: 8, borderColor: '#D32F2F', borderWidth: 1}}/>
             <Text style={styles.contentTitle} >{rowData.categories.name}</Text>
             <View style={styles.contentBackgroundButton}/>
-            <TouchableOpacity style={styles.goto} onPress={()=> this.handleRestaurant(navigate, rowData.categories.id)}><Image source={require('../Images/LandingPage/image.png')} style={{width: 70, height: 70}}/></TouchableOpacity>
+            <TouchableOpacity style={styles.goto} onPress={()=> this.handleRestaurant(navigate, rowData.categories.id, this.state.entity_id)}><Image source={require('../Images/LandingPage/image.png')} style={{width: 70, height: 70}}/></TouchableOpacity>
           </View>
         </View>
       )
@@ -178,8 +193,8 @@ class TestScreen extends Component {
         <Modal isVisible={this.state.isModalVisible}>
           <View style={styles.contentModalTop}>
             <Text style={styles.txtModal}>City</Text>
-            <RoundedButton style={styles.button} text={"New York"} onPress={this._hideModal} />
-            <RoundedButton style={styles.button} text={"New Jersey"} onPress={this._hideModal} />
+            <RoundedButton style={styles.button} text={"New York"} onPress={this.newYork} />
+            <RoundedButton style={styles.button} text={"New Jersey"} onPress={this.newJersey} />
           </View>
           <View style={styles.contentModalBottom}>
           </View>

@@ -21,7 +21,7 @@ export function * restaurantByCategoriesRequest (api,action) {
   // const { data } = action
   // make the call to the api
   console.log('Action restaurantByCategoriesRequest: '+ action);
-  const response = yield call(ApiForSaga.apiForSaga, AppConfig.baseURL+"search?category="+action.catId, "GET", "");
+  const response = yield call(ApiForSaga.apiForSaga, AppConfig.baseURL+"search?entity_id="+action.entity_id+"&entity_type=city&category="+action.catId, "GET", "");
 
   // success?
   if (response.status == 200) {
